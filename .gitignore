@@ -26,3 +26,6 @@ ENV/
 # Editor
 *.swp
 *~
+
+*.env
+*/*.env
