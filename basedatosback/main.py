@@ -16,5 +16,3 @@ try:
 except Exception as e:
     print("No conecto\n", e)
 
-
-#
