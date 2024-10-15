@@ -7,18 +7,12 @@ services:
     ports:
       - 1433:1433
     volumes:
-      - sql-server-data:/var/opt/mssql/
-      - sqldata:/var/opt/sqlserver/data
-      - sqllog:/var/opt/sqlserver/log
-      - sqlbackup:/var/opt/sqlserver/backup
-      - /c/docker/shared:/usr/shared
+      #https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-security?view=sql-server-ver16
+      - ./sqlserverdata/data:/var/opt/mssql/data
+      - ./sqlserverdata/log:/var/opt/mssql/log
+      - ./sqlserverdata/secrets:/var/opt/mssql/secrets
+      - ./sqlserverdata/datasql:/var/opt/sqlserver/data
+      - ./sqlserverdata/logsql:/var/opt/sqlserver/log
     env_file:
       - sqlserver.env
       - sapassword.env
-
-volumes:
-  sql-server-data:
-    driver: local
-  sqldata:
-  sqllog:
-  sqlbackup:
