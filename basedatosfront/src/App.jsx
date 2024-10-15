@@ -1,9 +1,9 @@
-import { Box } from '@chakra-ui/react'
+import Sidebar from './pages/SideBar.jsx'
 
 function App() {
   return (
     <>
-      Pantalla 2
+      <Sidebar/>
     </>
   )
 }
