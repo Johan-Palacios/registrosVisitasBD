@@ -3,6 +3,8 @@ import globals from 'globals'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import neostandard from 'neostandard'
+import oxlint from 'eslint-plugin-oxlint'
 
 export default [
   { ignores: ['dist'] },
@@ -35,4 +37,6 @@ export default [
       ],
     },
   },
+  oxlint.configs['flat/recommended'],
+  ...neostandard(),
 ]
