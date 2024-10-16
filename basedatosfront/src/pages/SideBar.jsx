@@ -4,14 +4,15 @@ import { AtSignIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 const Sidebar = ({ children }) => {
   const sidebar = useDisclosure();
-    return (
+  return (
     <Box
       as="section"
       bg="gray.50"
       _dark={{
         bg: "gray.700",
-        }}
+      }}
       minH="100vh"
+      overflowY={'auto'}
     >
       <SidebarContent
         display={{
@@ -57,7 +58,7 @@ const Sidebar = ({ children }) => {
               md: "none",
             }}
             onClick={sidebar.onOpen}
-            icon={<HamburgerIcon/>}
+            icon={<HamburgerIcon />}
             size="sm"
           />
           <Text
@@ -86,9 +87,12 @@ const Sidebar = ({ children }) => {
           </Flex>
         </Flex>
 
-        <Box as="main" p="4">
-          {/* Add content here, remove div below  */}
-          <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" />
+        <Box as="main" p="4"
+        >
+          <Box
+            margin={4} rounded="md" h="96">
+            {children}
+          </Box>
         </Box>
       </Box>
     </Box>
