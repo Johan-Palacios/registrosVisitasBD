@@ -2,7 +2,7 @@ import { Avatar, AvatarBadge, Box, Drawer, DrawerContent, DrawerOverlay, Flex, I
 import SidebarContent from '@components/userInteraction/SidebarContent.jsx'
 import { AtSignIcon, HamburgerIcon } from "@chakra-ui/icons";
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
   const sidebar = useDisclosure();
     return (
     <Box
