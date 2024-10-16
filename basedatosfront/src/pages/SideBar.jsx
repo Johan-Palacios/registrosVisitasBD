@@ -1,5 +1,5 @@
 import { Avatar, AvatarBadge, Box, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, IconButton, Text, useDisclosure } from "@chakra-ui/react";
-import SidebarContent from '../components/userInteraction/SidebarContent.jsx';
+import SidebarContent from '@components/userInteraction/SidebarContent.jsx'
 import { AtSignIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 const Sidebar = () => {
