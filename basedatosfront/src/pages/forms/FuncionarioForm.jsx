@@ -1,26 +1,24 @@
-import { Button, FormControl, FormLabel, Input, Select, Stack } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react'
 import FormBase from '../../components/forms/FormBase.jsx'
 
 const FuncionarioForm = () => {
-
   return (
     <>
-      <FormBase>
+      <FormBase nameForm='Agregar Funcionario'>
         <FormControl>
           <Stack spacing={4}>
 
             <FormLabel>DPI Funcionario </FormLabel>
-            <Input type='number' placeholder="Ejemplo: 2979348101301" required />
-
+            <Input type='number' placeholder='Ejemplo: 2979348101301' required />
 
             <FormLabel>Nombre Funcionario </FormLabel>
-            <Input type='text' placeholder="Ejemplo: Juan Emiliano" required />
+            <Input type='text' placeholder='Ejemplo: Juan Emiliano' required />
 
             <FormLabel>Apellidos Visitante </FormLabel>
-            <Input type='text' placeholder="Ejemplo:  Paredes Camposeco" required />
+            <Input type='text' placeholder='Ejemplo:  Paredes Camposeco' required />
 
             <FormLabel>Seleccione Parametro de Interés</FormLabel>
-            <Select placeholder='Ningun parametro Seleccionado' /* onChange={} */ required marginBottom={2}>
+            <Select placeholder='Ningun parametro Seleccionado' required marginBottom={2}>
               {/* {availableInterestParam.map(({ name }) => { */}
               {/*   return <option key={name}>{name}</option> */}
               <option>Tramite 1 Ejemplo</option>
@@ -39,13 +37,10 @@ const FuncionarioForm = () => {
               Guardar
             </Button>
 
-
           </Stack>
         </FormControl>
       </FormBase>
     </>
   )
-
-
 }
 export default FuncionarioForm

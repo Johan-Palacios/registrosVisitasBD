@@ -1,15 +1,14 @@
-import { Button, FormLabel, Input, Stack, FormControl } from "@chakra-ui/react"
+import { Button, FormLabel, Input, Stack, FormControl } from '@chakra-ui/react'
 import FormBase from '@components/forms/FormBase.jsx'
-
 
 const NuevoEdificio = () => {
   return (
     <>
-      <FormBase>
+      <FormBase nameForm='Nuevo Edificio'>
         <FormControl>
           <Stack spacing={4}>
             <FormLabel>Ingresa un Nuevo Edificio</FormLabel>
-            <Input type='text' placeholder="Ejemplo: Edificio XX" required />
+            <Input type='text' placeholder='Ejemplo: Edificio XX' required />
             <Button
               mt={4}
               colorScheme='teal'

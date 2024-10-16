@@ -1,10 +1,10 @@
-import { Box, Heading, Stack } from "@chakra-ui/react"
+import { Box, Heading } from '@chakra-ui/react'
 import { PropTypes } from 'prop-types'
 const FormBase = ({ nameForm, children }) => {
   return (
     <>
       <Heading marginBottom={16}>{nameForm}</Heading>
-      <Box as="form">
+      <Box as='form'>
         {children}
       </Box>
     </>

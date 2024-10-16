@@ -19,7 +19,7 @@ import { PropTypes } from 'prop-types'
 //   { title: 'Third', description: 'Select Rooms' },
 // ]
 
-const StepperForm =  ({steps}) => {
+const StepperForm = ({ steps }) => {
   const { activeStep } = useSteps({
     index: 1,
     count: steps.length,
@@ -54,4 +54,3 @@ StepperForm.propTypes = {
 }
 
 export default StepperForm
-
