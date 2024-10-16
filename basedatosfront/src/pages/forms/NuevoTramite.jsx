@@ -1,5 +1,5 @@
 import { Button, FormLabel, Input, Stack, FormControl } from "@chakra-ui/react"
-import FormBase from '../../components/forms/FormBase.jsx'
+import FormBase from '@components/forms/FormBase.jsx'
 
 
 const NuevoTramite = () => {
