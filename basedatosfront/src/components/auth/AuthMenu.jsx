@@ -1,29 +1,61 @@
-import { Box, Button, Center, Flex, Heading, Input, Text, VisuallyHidden } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, Input, Text, VisuallyHidden, useToast } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const AuthMenu = () => {
+  const toast = useToast()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    const response = await fetch('http://localhost:8000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
+    const registrationToast = toast({
+      title: 'Conectando con el servidor',
+      description: 'Cargando...',
+      status: 'loading',
     })
 
-    const data = await response.json()
-    if (response.ok) {
-      alert('Inicio Sesion')
-      return navigate('/')
-    } else {
-      alert('Error al iniciar Sesión: ' + data.detail)
+    try {
+      const response = await fetch('http://localhost:8000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await response.json()
+      toast.close(registrationToast)
+      console.log(response)
+      if (response.status === 200) {
+        localStorage.setItem('token', data.access_token)
+        toast({
+          title: 'Usuario Autenticado',
+          description: 'Iniciando Dashboard',
+          status: 'success',
+        })
+        return navigate('/')
+      } else if (response.status === 400) {
+        toast({
+          title: 'Error',
+          description: 'Credenciales Invalidas',
+          status: 'error',
+        })
+      } else {
+        toast({
+          title: 'Error',
+          description: 'No se pudo establecer conexión con el servidor',
+          status: 'error',
+        })
+      }
+    } catch (error) {
+      toast.close(registrationToast)
+      toast({
+        title: 'Error',
+        description: 'No se pudo establecer conexión con el servidor',
+        status: 'error',
+      })
     }
   }
   return (

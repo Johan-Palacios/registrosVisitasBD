@@ -13,6 +13,10 @@
       "@context/*":[
         "./src/context/*"
       ],
+
+      "@utils/*":[
+        "./src/utils/*"
+      ],
     }
   }
 }
