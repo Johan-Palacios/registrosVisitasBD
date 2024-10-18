@@ -17,7 +17,7 @@ const FuncionarioForm = () => {
             <FormLabel>Apellidos Visitante </FormLabel>
             <Input type='text' placeholder='Ejemplo:  Paredes Camposeco' required />
 
-            <FormLabel>Seleccione Parametro de Interés</FormLabel>
+            <FormLabel>Seleccione Tipo Tramite</FormLabel>
             <Select placeholder='Ningun parametro Seleccionado' required marginBottom={2}>
               {/* {availableInterestParam.map(({ name }) => { */}
               {/*   return <option key={name}>{name}</option> */}
