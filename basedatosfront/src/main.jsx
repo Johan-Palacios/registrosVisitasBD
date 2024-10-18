@@ -1,14 +1,14 @@
-import { StrictMode } from 'react'
-import theme from './libs/theme'
-import { createRoot } from 'react-dom/client'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom'
-
+import theme from './libs/theme'
 import App from './App.jsx'
 import AuthPage from './pages/AuthPage.jsx'
+import { RenderProvider } from '@context/RenderContext'
 
 const router = createBrowserRouter([
   {
@@ -25,7 +25,9 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <RouterProvider router={router} />
+      <RenderProvider>
+        <RouterProvider router={router} />
+      </RenderProvider>
     </ChakraProvider>
   </StrictMode>
 )

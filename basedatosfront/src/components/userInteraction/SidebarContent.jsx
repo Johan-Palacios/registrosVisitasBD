@@ -1,11 +1,35 @@
+/* eslint-disable react/jsx-handler-names */
 import { Flex, Text, Box, Collapse, useDisclosure, Icon } from '@chakra-ui/react'
 import NavItem from './NavItem.jsx'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { useContext } from 'react'
+import RenderContext from '@context/RenderContext.jsx'
 
 const SidebarContent = (props) => {
-  const manageVisitas = useDisclosure()
-  const manageSpaces = useDisclosure()
-  const manageAdmin = useDisclosure()
+  const handleVisitas = useDisclosure()
+  const handleSpaces = useDisclosure()
+  const handleAdmin = useDisclosure()
+  const { updateRenderContext } = useContext(RenderContext)
+
+  const handleNuevoTramite = () => {
+    updateRenderContext('nuevoTramite')
+  }
+
+  const handleNuevoFuncionario = () => {
+    updateRenderContext('nuevoFuncionario')
+  }
+
+  const handleNuevoVisitante = () => {
+    updateRenderContext('visitanteForm')
+  }
+
+  const handleNuevaOficina = () => {
+    updateRenderContext('nuevaOficina')
+  }
+
+  const handleNuevoEdificio = () => {
+    updateRenderContext('nuevoEdificio')
+  }
 
   return (
     <Box
@@ -49,35 +73,33 @@ const SidebarContent = (props) => {
         aria-label='Main Navigation'
       >
 
-        <NavItem onClick={manageAdmin.onToggle}>
+        <NavItem onClick={handleAdmin.onToggle}>
           Gestionar Administración
           <Icon
             as={ChevronDownIcon}
-
             ml='auto'
-            transform={manageAdmin.isOpen && 'rotate(90deg)'}
+            transform={handleAdmin.isOpen && 'rotate(90deg)'}
           />
         </NavItem>
-        <Collapse in={manageAdmin.isOpen}>
-          <NavItem pl='12' py='2'>
+        <Collapse in={handleAdmin.isOpen}>
+          <NavItem pl='12' py='2' onClick={handleNuevoTramite}>
             Agregar Nuevo Tramite
           </NavItem>
-          <NavItem pl='12' py='2'>
+          <NavItem pl='12' py='2' onClick={handleNuevoFuncionario}>
             Agregar Funcionario
           </NavItem>
         </Collapse>
 
-        <NavItem onClick={manageVisitas.onToggle}>
+        <NavItem onClick={handleVisitas.onToggle}>
           Gestionar Visitantes
           <Icon
             as={ChevronDownIcon}
-
             ml='auto'
-            transform={manageVisitas.isOpen && 'rotate(90deg)'}
+            transform={handleVisitas.isOpen && 'rotate(90deg)'}
           />
         </NavItem>
-        <Collapse in={manageVisitas.isOpen}>
-          <NavItem pl='12' py='2'>
+        <Collapse in={handleVisitas.isOpen}>
+          <NavItem pl='12' py='2' onClick={handleNuevoVisitante}>
             Agregar Visitante
           </NavItem>
           <NavItem pl='12' py='2'>
@@ -85,20 +107,19 @@ const SidebarContent = (props) => {
           </NavItem>
         </Collapse>
 
-        <NavItem onClick={manageSpaces.onToggle}>
+        <NavItem onClick={handleSpaces.onToggle}>
           Gestionar Espacios
           <Icon
             as={ChevronDownIcon}
-
             ml='auto'
-            transform={manageSpaces.isOpen && 'rotate(90deg)'}
+            transform={handleSpaces.isOpen && 'rotate(90deg)'}
           />
         </NavItem>
-        <Collapse in={manageSpaces.isOpen}>
-          <NavItem pl='12' py='2'>
+        <Collapse in={handleSpaces.isOpen}>
+          <NavItem pl='12' py='2' onClick={handleNuevaOficina}>
             Agregar Oficina
           </NavItem>
-          <NavItem pl='12' py='2'>
+          <NavItem pl='12' py='2' onClick={handleNuevoEdificio}>
             Agregar Edificio
           </NavItem>
         </Collapse>
