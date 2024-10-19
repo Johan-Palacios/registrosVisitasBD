@@ -1,5 +1,5 @@
 import pyodbc
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from jose import JWTError, jwt
