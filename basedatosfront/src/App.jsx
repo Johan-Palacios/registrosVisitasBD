@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from 'react'
 import { isAuthenticated } from '@utils/auth/auth'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
+import NuevaVisita from './pages/forms/NuevaVisita'
 
 function App () {
   const toast = useToast()
@@ -56,6 +57,7 @@ function App () {
           {formRender.visitanteForm ? <VisitanteForm /> : <></>}
           {formRender.nuevaOficina ? <NuevoOficina /> : <></>}
           {formRender.nuevoEdificio ? <NuevoEdificio /> : <></>}
+          {formRender.nuevaVisita ? <NuevaVisita /> : <></>}
           {/* eslint-disable-next-line @stylistic/jsx-closing-tag-location */}
         </Sidebar>
         : <></>}
