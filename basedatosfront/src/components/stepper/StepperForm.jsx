@@ -1,3 +1,4 @@
+import StepContext from '@context/StepContext'
 import {
   Step,
   StepDescription,
@@ -8,27 +9,18 @@ import {
   StepStatus,
   StepTitle,
   Stepper,
-  useSteps,
   Box,
 } from '@chakra-ui/react'
 import { PropTypes } from 'prop-types'
-
-// onst steps = [
-//   { title: 'First', description: 'Contact Info' },
-//   { title: 'Second', description: 'Date & Time' },
-//   { title: 'Third', description: 'Select Rooms' },
-// ]
+import { useContext } from 'react'
 
 const StepperForm = ({ steps }) => {
-  const { activeStep } = useSteps({
-    index: 1,
-    count: steps.length,
-  })
+  const { activeStep, updateStepIndex } = useContext(StepContext)
 
   return (
-    <Stepper index={activeStep} marginBottom={16}>
+    <Stepper size='lg' index={activeStep} marginBottom={16}>
       {steps.map((step, index) => (
-        <Step key={index}>
+        <Step key={index} onClick={() => updateStepIndex(index)}>
           <StepIndicator>
             <StepStatus
               complete={<StepIcon />}
@@ -37,12 +29,12 @@ const StepperForm = ({ steps }) => {
             />
           </StepIndicator>
 
-          <Box flexShrink='0'>
+          <Box flexShrink='1' flexWrap='wrap'>
             <StepTitle>{step.title}</StepTitle>
             <StepDescription>{step.description}</StepDescription>
           </Box>
-
           <StepSeparator />
+
         </Step>
       ))}
     </Stepper>
@@ -50,7 +42,7 @@ const StepperForm = ({ steps }) => {
 }
 
 StepperForm.propTypes = {
-  steps: PropTypes.object
+  steps: PropTypes.array
 }
 
 export default StepperForm
