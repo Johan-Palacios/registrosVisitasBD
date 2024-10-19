@@ -9,6 +9,7 @@ import theme from './libs/theme'
 import App from './App.jsx'
 import AuthPage from './pages/AuthPage.jsx'
 import { RenderProvider } from '@context/RenderContext'
+import { StepProvider } from '@context/StepContext'
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,9 @@ createRoot(document.getElementById('root')).render(
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <RenderProvider>
-        <RouterProvider router={router} />
+        <StepProvider>
+          <RouterProvider router={router} />
+        </StepProvider>
       </RenderProvider>
     </ChakraProvider>
   </StrictMode>
