@@ -31,6 +31,10 @@ const SidebarContent = (props) => {
     updateRenderContext('nuevoEdificio')
   }
 
+  const handleNuevaVisita = () => {
+    updateRenderContext('nuevaVisita')
+  }
+
   return (
     <Box
       as='nav'
@@ -102,7 +106,7 @@ const SidebarContent = (props) => {
           <NavItem pl='12' py='2' onClick={handleNuevoVisitante}>
             Agregar Visitante
           </NavItem>
-          <NavItem pl='12' py='2'>
+          <NavItem pl='12' py='2' onClick={handleNuevaVisita}>
             Agregar Visita
           </NavItem>
         </Collapse>
