@@ -117,7 +117,6 @@ async def login(user: UserLogin):
     except pyodbc.InterfaceError:
         raise HTTPException(status_code=400, detail="Credenciales Invalidas")
     except Exception as _:
-
         raise HTTPException(status_code=500, detail="BD No conectada")
 
 
