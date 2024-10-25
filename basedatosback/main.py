@@ -27,6 +27,18 @@ app.add_middleware(
 SERVER = "localhost"
 DATABASE = "registros"
 
+
+class Visitante(BaseModel):
+    dpi: int
+    nombre: str
+    apellido: str
+    telefono: str
+    direccion: str
+
+class Tramite(BaseModel):
+    tramite: str
+
+
 class UserLogin(BaseModel):
     username: str
     password: str
@@ -35,6 +47,7 @@ class UserLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class Database:
     def __init__(self):
@@ -54,8 +67,12 @@ class Database:
         self.conn = pyodbc.connect(connection_string)
         self.cursor = self.conn.cursor()
         self.conn_status = True
+
     def get_conn_status(self):
         return self.conn_status
+
+    def get_conn(self):
+        return self.conn
 
     def close(self):
         self.conn_status = False
@@ -67,7 +84,9 @@ class Database:
     def get_cursor(self) -> pyodbc.Cursor:
         return self.cursor
 
+
 db = Database()
+
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Genera un token JWT con datos de usuario y expiración opcional."""
@@ -92,10 +111,12 @@ def is_token_valid(token: str) -> bool:
     except JWTError:
         return False
 
+
 @app.get("/check-connection", response_model=bool)
 async def check_connection():
     conn_status = db.get_conn_status()
     return conn_status
+
 
 @app.post("/login")
 async def login(user: UserLogin):
@@ -118,6 +139,96 @@ async def login(user: UserLogin):
         raise HTTPException(status_code=400, detail="Credenciales Invalidas")
     except Exception as _:
         raise HTTPException(status_code=500, detail="BD No conectada")
+
+
+def fetch_data_from_stored_procedure(sp_name: str, params: list = []):
+    if db.get_conn_status():
+        try:
+            cursor = db.get_cursor()
+
+            placeholders = ", ".join(["?" for _ in params])
+            query = f"EXEC {sp_name} {placeholders}"
+
+            cursor.execute(query, params)
+
+            columns = [column[0] for column in cursor.description]
+
+            results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            return results
+
+        except Exception as e:
+            return {"error": str(e)}
+
+
+def execute_stored_procedure(sp_name: str, params: list):
+    if db.get_conn_status():
+        try:
+            cursor = db.get_cursor()
+            conn = db.get_conn()
+
+            placeholders = ", ".join(["?" for _ in params])
+            query = f"EXEC {sp_name} {placeholders}"
+
+            cursor.execute(query, params)
+            conn.commit()
+            return {"message": "Exitoso"}
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/visitantes")
+async def get_Visitantes(authorization: str = Header(...)):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    sp_name = "Ver_Visitantes"
+    data = fetch_data_from_stored_procedure(sp_name)
+
+    return data
+
+
+@app.post("/insertar-visitante")
+async def insert_data(
+    visitante: Visitante,
+    authorization: str = Header(...),
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token invalido o expirado")
+
+    sp_name = "Insert_Visitante"  # Nombre del procedimiento almacenado
+    params = [
+        visitante.dpi,
+        visitante.apellido,
+        visitante.nombre,
+        visitante.direccion,
+        visitante.telefono,
+    ]  # Parámetros que vamos a pasar al procedimiento
+
+    # Llamar a la función que ejecuta el procedimiento almacenado
+    result = execute_stored_procedure(sp_name, params)
+
+    return result
+
+@app.post("/insertar-tramite")
+async def insert_tramite(
+    tramite: Tramite,
+    authorization: str = Header(...),
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token invalido o expirado")
+
+    sp_name = "Insertar_Tramite"  # Nombre del procedimiento almacenado
+    params = [
+        tramite.tramite
+    ]
+
+    result = execute_stored_procedure(sp_name, params)
+
+    return result
+
 
 
 @app.get("/protected-route")
