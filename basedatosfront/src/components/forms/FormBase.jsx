@@ -1,10 +1,10 @@
 import { Box, Heading } from '@chakra-ui/react'
 import { PropTypes } from 'prop-types'
-const FormBase = ({ nameForm, children }) => {
+const FormBase = ({ nameForm, onSubmit, children }) => {
   return (
     <>
       <Heading marginBottom={16}>{nameForm}</Heading>
-      <Box as='form'>
+      <Box as='form' onSubmit={onSubmit}>
         {children}
       </Box>
     </>
