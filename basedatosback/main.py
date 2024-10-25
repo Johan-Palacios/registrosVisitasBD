@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 SERVER = "localhost"
-DATABASE = "master"
+DATABASE = "registros"
 
 class UserLogin(BaseModel):
     username: str
