@@ -1,7 +1,11 @@
+import useGetFetch from '@/hooks/useGetFetch'
 import { Button, FormLabel, Input, Stack, FormControl, Select } from '@chakra-ui/react'
 import FormBase from '@components/forms/FormBase.jsx'
 
 const NuevoOficina = () => {
+  const {data, loading, error} = useGetFetch('http://localhost:8000/edificios')
+  console.log(data)
+
   return (
     <>
       <FormBase nameForm='Nueva Oficina'>
@@ -10,6 +14,7 @@ const NuevoOficina = () => {
             <FormLabel>Ingresa un Nueva Oficina</FormLabel>
             <Input type='text' placeholder='Ejemplo: Oficina XX' required />
 
+            {/* {loading? } */}
             <FormLabel>Seleccione Edificio</FormLabel>
             <Select placeholder='Ningun parametro Seleccionado' required marginBottom={2}>
               {/* {availableInterestParam.map(({ name }) => { */}

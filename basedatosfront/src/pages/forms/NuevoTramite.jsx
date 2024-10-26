@@ -1,3 +1,4 @@
+import fetchInsert from '@/utils/fetch/fetchInsert'
 import { Button, FormLabel, Input, Stack, FormControl, useToast } from '@chakra-ui/react'
 import FormBase from '@components/forms/FormBase.jsx'
 import { useState } from 'react'
@@ -14,46 +15,10 @@ const NuevoTramite = () => {
   }
 
   const fetchInsertTramite = async (data) => {
-    const token = localStorage.getItem('token')
-
-    const insertToast = toast({
-      title: 'Conectando con el servidor',
-      description: 'Cargando...',
-      status: 'loading',
-    })
-
-    try {
-      const response = await fetch('http://localhost:8000/insertar-tramite', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
-
-      toast.close(insertToast)
-      if (response.ok) {
-        toast({
-          title: 'Trámite Guardado',
-          description: 'Inserción Exitosa',
-          status: 'success',
-        })
-      }
-      if (!response.ok) {
-        toast({
-          title: 'Error',
-          description: 'No es posible guardar el Trámite',
-          status: 'error',
-        })
-      }
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudo establecer conexión con el servidor',
-        status: 'error',
-      })
-    }
+    fetchInsert('http://localhost:8000/insertar-tramite',
+      data,
+      toast,
+      'No fue posible guardar el tramite', 'Trámite Guardado')
   }
 
   return (
