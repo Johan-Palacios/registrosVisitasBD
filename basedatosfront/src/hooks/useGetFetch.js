@@ -8,7 +8,7 @@ const useGetFetch = (endPoint) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true) // Inicia el estado de carga
+      setLoading(true)
       try {
         const response = await fetch(endPoint, {
           method: 'GET',
@@ -18,22 +18,21 @@ const useGetFetch = (endPoint) => {
           },
         })
 
-        // Manejo de errores HTTP
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
 
         const result = await response.json()
-        setData(result) // Almacena los datos en el estado
+        setData(result)
       } catch (err) {
-        setError(err.message) // Maneja el error
+        setError(err.message)
       } finally {
-        setLoading(false) // Finaliza el loading
+        setLoading(false)
       }
     }
 
     fetchData()
-  }, [endPoint]) // Re-ejecutar si la URL cambia
+  }, [endPoint])
 
   return { data, loading, error }
 }
