@@ -35,6 +35,10 @@ class Visitante(BaseModel):
     telefono: str
     direccion: str
 
+
+class Edificio(BaseModel):
+    edificio: str
+
 class Tramite(BaseModel):
     tramite: str
 
@@ -188,6 +192,17 @@ async def get_Visitantes(authorization: str = Header(...)):
     return data
 
 
+@app.get("/edificios")
+async def get_Edificios(authorization: str = Header(...)):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    sp_name = "Ver_Edificios"
+    data = fetch_data_from_stored_procedure(sp_name)
+
+    return data
+
+
 @app.post("/insertar-visitante")
 async def insert_data(
     visitante: Visitante,
@@ -197,16 +212,34 @@ async def insert_data(
     if not is_token_valid(token):
         raise HTTPException(status_code=401, detail="Token invalido o expirado")
 
-    sp_name = "Insert_Visitante"  # Nombre del procedimiento almacenado
+    sp_name = "Insert_Visitante"
     params = [
         visitante.dpi,
         visitante.apellido,
         visitante.nombre,
         visitante.direccion,
         visitante.telefono,
-    ]  # Parámetros que vamos a pasar al procedimiento
+    ]
 
-    # Llamar a la función que ejecuta el procedimiento almacenado
+    result = execute_stored_procedure(sp_name, params)
+
+    return result
+
+
+@app.post("/insertar-edificio")
+async def insert_edificio(
+    edificio: Edificio,
+    authorization: str = Header(...),
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token invalido o expirado")
+
+    sp_name = "Insertar_Edificio"
+    params = [
+        edificio.edificio
+    ]
+
     result = execute_stored_procedure(sp_name, params)
 
     return result
@@ -220,7 +253,7 @@ async def insert_tramite(
     if not is_token_valid(token):
         raise HTTPException(status_code=401, detail="Token invalido o expirado")
 
-    sp_name = "Insertar_Tramite"  # Nombre del procedimiento almacenado
+    sp_name = "Insertar_Tramite"
     params = [
         tramite.tramite
     ]
