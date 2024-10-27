@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 const NuevoOficina = () => {
   const toast = useToast()
-  const { data, loading, error } = useGetFetch('http://localhost:8000/edificios')
+  const { data, loading } = useGetFetch('http://localhost:8000/edificios')
   const [idEdificio, setidEdificio] = useState()
   const [oficina, setOficina] = useState()
   const [numeroOficina, setNumeroOficina] = useState()
@@ -44,11 +44,13 @@ const NuevoOficina = () => {
 
               ? <>
                 <FormLabel>Seleccione Edificio</FormLabel>
+
                 <Select placeholder='Ningun Edificio' required marginBottom={2} onChange={handleSelectChange}>
                   {data.map(({ idEdificioNumber, idEdificio, edificio }) => {
                     return <option key={idEdificioNumber} value={idEdificioNumber}>{`${idEdificio} - ${edificio}`}</option>
                   })}
                 </Select>
+
                 {/* eslint-disable-next-line @stylistic/jsx-indent */}
                 </>
               : <></>}

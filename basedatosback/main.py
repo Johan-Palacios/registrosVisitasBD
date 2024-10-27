@@ -41,8 +41,13 @@ class Oficina(BaseModel):
     idEdificio: int
     oficina: str
 
+
+class Edificioid(BaseModel):
+    idEdificio: int
+
 class Edificio(BaseModel):
     edificio: str
+
 
 class Tramite(BaseModel):
     tramite: str
@@ -208,8 +213,54 @@ async def get_Edificios(authorization: str = Header(...)):
     return data
 
 
+@app.get("/tramites")
+async def get_tramites(authorization: str = Header(...)):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    sp_name = "Ver_Tramites"
+    data = fetch_data_from_stored_procedure(sp_name)
+
+    return data
+
+
+@app.post("/oficina-by-edificio")
+async def get_oficina_by_edificio(edificioid: Edificioid, authorization: str = Header(...)):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    sp_name = "Ver_Oficina_by_Edificio"
+    params = [edificioid.idEdificio]
+    data = fetch_data_from_stored_procedure(sp_name, params)
+
+    return data
+
+
 @app.post("/insertar-visitante")
 async def insert_data(
+    visitante: Visitante,
+    authorization: str = Header(...),
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token invalido o expirado")
+
+    sp_name = "Insert_Visitante"
+    params = [
+        visitante.dpi,
+        visitante.apellido,
+        visitante.nombre,
+        visitante.direccion,
+        visitante.telefono,
+    ]
+
+    result = execute_stored_procedure(sp_name, params)
+
+    return result
+
+
+@app.post("/insertar-funcionario")
+async def insert_funcionario(
     visitante: Visitante,
     authorization: str = Header(...),
 ):
@@ -244,7 +295,6 @@ async def insert_office(
     params = [
         oficina.idEdificio,
         oficina.numeroOficina,
-        oficina.oficina
     ]
 
     result = execute_stored_procedure(sp_name, params)
@@ -262,13 +312,12 @@ async def insert_edificio(
         raise HTTPException(status_code=401, detail="Token invalido o expirado")
 
     sp_name = "Insertar_Edificio"
-    params = [
-        edificio.edificio
-    ]
+    params = [edificio.edificio]
 
     result = execute_stored_procedure(sp_name, params)
 
     return result
+
 
 @app.post("/insertar-tramite")
 async def insert_tramite(
@@ -280,23 +329,8 @@ async def insert_tramite(
         raise HTTPException(status_code=401, detail="Token invalido o expirado")
 
     sp_name = "Insertar_Tramite"
-    params = [
-        tramite.tramite
-    ]
+    params = [tramite.tramite]
 
     result = execute_stored_procedure(sp_name, params)
 
     return result
-
-
-
-@app.get("/protected-route")
-async def protected_route(authorization: str = Header(...)):
-    token = authorization.split(" ")[1]
-    if not is_token_valid(token):
-        raise HTTPException(status_code=401, detail="Token inválido o expirado")
-    if db.get_conn_status():
-        cursor = db.get_cursor()
-        print("No Entro")
-
-    return {"message": "Acceso permitido"}
