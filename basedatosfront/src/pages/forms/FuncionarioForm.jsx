@@ -2,20 +2,19 @@ import useGetFetch from '@hooks/useGetFetch'
 import { Button, FormControl, FormLabel, Input, Select, Stack, useToast } from '@chakra-ui/react'
 import FormBase from '@components/forms/FormBase.jsx'
 import { useEffect, useState } from 'react'
+import fetchQuery from '@/utils/fetch/fetchQuery'
+import fetchInsert from '@/utils/fetch/fetchInsert'
 
 const FuncionarioForm = () => {
   const toast = useToast()
-  const { data: tramites, loading: loadingTramites } = useGetFetch('http://localhost:8000/tramites')
   const { data: edificios, loading: loadingEdificios } = useGetFetch('http://localhost:8000/edificios')
 
   const [dpi, setDPI] = useState()
   const [nombre, setNombre] = useState()
   const [apellidos, setApellidos] = useState()
-  const [tramite, setTramite] = useState()
   const [edificio, setEdificio] = useState()
   const [oficinas, setOficinas] = useState()
   const [oficina, setOficina] = useState()
-  const [loadingOficinas, setOficinasLoading] = useState(true)
 
   const handleDPI = (e) => {
     const input = e.target.value
@@ -26,10 +25,27 @@ const FuncionarioForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const data = { dpi, apellido: apellidos, nombre, idOficina: parseInt(oficina), idEdificio: parseInt(edificio) }
+    fetchFuncionario(data)
+    e.target.reset()
+    setDPI('')
+  }
+
+  const fetchFuncionario = async (data) => {
+    await fetchInsert('http://localhost:8000/insertar-funcionario',
+      data,
+      toast,
+      'No se pudo insertar el Funcionario', 'Funcionario Guardado')
   }
 
   useEffect(() => {
-
+    if (edificio) {
+      const fetchData = async () => {
+        const data = await fetchQuery('http://localhost:8000/oficina-by-edificio', { idEdificio: edificio })
+        setOficinas(data)
+      }
+      fetchData()
+    }
   }, [edificio])
 
   return (
@@ -48,19 +64,8 @@ const FuncionarioForm = () => {
             <Input type='text' placeholder='Ejemplo:  Paredes Camposeco' required maxLength={59} onChange={(e) => setApellidos(e.target.value)} />
 
             {
-              !loadingTramites && !loadingEdificios
+              !loadingEdificios
                 ? <>
-
-                  <FormLabel>Seleccione Tipo Tramite</FormLabel>
-
-                  <Select placeholder='Ningun tramite Seleccionado' required marginBottom={2} onChange={(e) => setTramite(e.target.value)}>
-
-                    {tramites.map(({ idTramite, idTramiteNumber, tramite }) => {
-                      return <option key={idTramite} value={idTramiteNumber}>{`${idTramite} - ${tramite}`}</option>
-                    })}
-
-                  </Select>
-
                   <FormLabel>Seleccione Edificio</FormLabel>
 
                   <Select placeholder='Ningun Edificio' required marginBottom={2} onChange={(e) => setEdificio(e.target.value)}>
@@ -68,15 +73,15 @@ const FuncionarioForm = () => {
                       return <option key={idEdificioNumber} value={idEdificioNumber}>{`${idEdificio} - ${edificio}`}</option>
                     })}
                   </Select>
-                  {edificio
+                  {edificio && oficinas
                     ? <>
 
                       <FormLabel>Selecciona la Oficina</FormLabel>
 
                       <Select placeholder='Ninguna Oficina' required marginBottom={2} onChange={(e) => setOficina(e.target.value)}>
-                        {/* {oficinas.map(({ idOficina, numeroOficina, oficina }) => { */}
-                        {/*   return <option key={idOficina} value={numeroOficina}>{`${idOficina} - ${oficina}`}</option> */}
-                        {/* })} */}
+                        {oficinas.map(({ idOficina, numeroOficina, oficina }) => {
+                          return <option key={idOficina} value={numeroOficina}>{`${idOficina} - ${oficina}`}</option>
+                        })}
                       </Select>
 
                       <Button
