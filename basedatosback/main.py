@@ -35,6 +35,13 @@ class Visitante(BaseModel):
     telefono: str
     direccion: str
 
+class Funcionario(BaseModel):
+    dpi: int
+    nombre: str
+    apellido: str
+    idEdificio: int
+    idOficina: int
+
 
 class Oficina(BaseModel):
     numeroOficina: int
@@ -261,20 +268,20 @@ async def insert_data(
 
 @app.post("/insertar-funcionario")
 async def insert_funcionario(
-    visitante: Visitante,
+    funcionario: Funcionario,
     authorization: str = Header(...),
 ):
     token = authorization.split(" ")[1]
     if not is_token_valid(token):
         raise HTTPException(status_code=401, detail="Token invalido o expirado")
 
-    sp_name = "Insert_Visitante"
+    sp_name = "Insertar_Funcionario"
     params = [
-        visitante.dpi,
-        visitante.apellido,
-        visitante.nombre,
-        visitante.direccion,
-        visitante.telefono,
+        funcionario.dpi,
+        funcionario.apellido,
+        funcionario.nombre,
+        funcionario.idOficina,
+        funcionario.idEdificio
     ]
 
     result = execute_stored_procedure(sp_name, params)
