@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional
+from datetime import date, time
 
 SECRET_KEY = "mysecretkey123"
 ALGORITHM = "HS256"
@@ -35,12 +36,25 @@ class Visitante(BaseModel):
     telefono: str
     direccion: str
 
+
 class Funcionario(BaseModel):
     dpi: int
     nombre: str
     apellido: str
     idEdificio: int
     idOficina: int
+
+
+class Visita(BaseModel):
+    idVisitante: int
+    fecha: date
+    hora: time
+
+
+class TramiteVisita(BaseModel):
+    idVisitante: int
+    idTramite: int
+    fecha: date
 
 
 class Oficina(BaseModel):
@@ -51,6 +65,11 @@ class Oficina(BaseModel):
 
 class Edificioid(BaseModel):
     idEdificio: int
+
+
+class VisitanteDPI(BaseModel):
+    visitanteDPI: str
+
 
 class Edificio(BaseModel):
     edificio: str
@@ -232,12 +251,28 @@ async def get_tramites(authorization: str = Header(...)):
 
 
 @app.post("/oficina-by-edificio")
-async def get_oficina_by_edificio(edificioid: Edificioid, authorization: str = Header(...)):
+async def get_oficina_by_edificio(
+    edificioid: Edificioid, authorization: str = Header(...)
+):
     token = authorization.split(" ")[1]
     if not is_token_valid(token):
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
     sp_name = "Ver_Oficina_by_Edificio"
     params = [edificioid.idEdificio]
+    data = fetch_data_from_stored_procedure(sp_name, params)
+
+    return data
+
+
+@app.post("/visitante-by-dpi")
+async def get_visitante_by_dpi(
+    visistanteDPI: VisitanteDPI, authorization: str = Header(...)
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    sp_name = "VER_VISITANTE_BY_DPI"
+    params = [visistanteDPI.visitanteDPI]
     data = fetch_data_from_stored_procedure(sp_name, params)
 
     return data
@@ -281,8 +316,42 @@ async def insert_funcionario(
         funcionario.apellido,
         funcionario.nombre,
         funcionario.idOficina,
-        funcionario.idEdificio
+        funcionario.idEdificio,
     ]
+
+    result = execute_stored_procedure(sp_name, params)
+
+    return result
+
+
+@app.post("/insertar-visita")
+async def insert_visita(
+    visita: Visita,
+    authorization: str = Header(...),
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token invalido o expirado")
+
+    sp_name = "Insert_Visita"
+    params = [visita.idVisitante, visita.fecha, visita.hora]
+
+    result = execute_stored_procedure(sp_name, params)
+
+    return result
+
+
+@app.post("/insertar-tramite-visita")
+async def insert_visita_tramite(
+    tramite_visita: TramiteVisita,
+    authorization: str = Header(...),
+):
+    token = authorization.split(" ")[1]
+    if not is_token_valid(token):
+        raise HTTPException(status_code=401, detail="Token invalido o expirado")
+
+    sp_name = "Insertar_Tramite_Visitante"
+    params = [tramite_visita.idVisitante,tramite_visita.idTramite, tramite_visita.fecha]
 
     result = execute_stored_procedure(sp_name, params)
 
