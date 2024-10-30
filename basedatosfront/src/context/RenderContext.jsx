@@ -12,7 +12,8 @@ export const RenderProvider = ({ children }) => {
     visitanteForm: false,
     nuevaVisita: false,
     verVisitantes: false,
-    verTramites: false
+    verTramites: false,
+    verEdificios: false
   })
 
   const updateRenderContext = (componentKey) => {
