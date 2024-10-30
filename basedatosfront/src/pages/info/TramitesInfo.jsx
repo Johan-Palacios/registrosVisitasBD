@@ -8,7 +8,12 @@ const FuncionariosInfo = () => {
     <>
       <Skeleton isLoaded={!loadingTramites} fadeDuration={0.4}>
         {!loadingTramites
-          ? <TableInfo data={tramites} primaryKey='idTramiteNumber' />
+          ? <TableInfo
+              data={tramites}
+              primaryKey='idTramiteNumber'
+              ignoreFields={['idTramiteNumber']}
+              title='Registro de Tramites'
+            />
           : <></>}
       </Skeleton>
 
