@@ -371,6 +371,7 @@ async def insert_office(
     params = [
         oficina.idEdificio,
         oficina.numeroOficina,
+        oficina.oficina
     ]
 
     result = execute_stored_procedure(sp_name, params)
