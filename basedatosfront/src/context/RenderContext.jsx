@@ -10,7 +10,9 @@ export const RenderProvider = ({ children }) => {
     nuevoFuncionario: false,
     nuevoEdificio: false,
     visitanteForm: false,
-    nuevaVisita: false
+    nuevaVisita: false,
+    verVisitantes: false,
+    verTramites: false
   })
 
   const updateRenderContext = (componentKey) => {
