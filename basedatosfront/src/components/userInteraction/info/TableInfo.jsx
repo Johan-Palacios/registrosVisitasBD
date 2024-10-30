@@ -1,75 +1,93 @@
 import {
+  Button,
+  Input,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   TableCaption,
   TableContainer,
-  Button,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   useColorModeValue
 } from '@chakra-ui/react'
 import PropTypes from 'prop-types'
+import { useState } from 'react'
 
-const TableInfo = ({ data, edit, remove, primaryKey, title }) => {
+const TableInfo = ({ data, edit, remove, primaryKey, title, ignoreFields = [] }) => {
+  const [filterText, setFilterText] = useState('')
   const headerBgColor = useColorModeValue('blue.500', 'blue.700')
   const headerColor = useColorModeValue('white', 'white')
   const rowHoverColor = useColorModeValue('gray.100', 'gray.600')
   const rowBgColor = useColorModeValue('white', 'gray.800')
 
-  const headers = data.length > 0 ? Object.keys(data[0]) : []
+  const headers = data.length > 0 ? Object.keys(data[0]).filter((header) => !ignoreFields.includes(header)) : []
+
+  const filteredData = data.filter((row) =>
+    headers.some((header) =>
+      row[header]?.toString().toLowerCase().includes(filterText.toLowerCase())
+    )
+  )
 
   return (
-    <TableContainer boxShadow='md' borderRadius='md'>
-      <Table variant='simple' size='sm'>
-        <TableCaption>{title}</TableCaption>
-        <Thead backgroundColor={headerColor}>
-          <Tr backgroundColor={headerBgColor}>
-            {headers.map((header) => (
-              <Th key={header} isNumeric={typeof data[0][header] === 'number'}>
-                {header}
-              </Th>
-            ))}
-            {(edit || remove) && <Th>Actions</Th>}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((row, rowIndex) => (
-            <Tr key={row[primaryKey] || rowIndex} _hover={{ backgroundColor: rowHoverColor }} backgroundColor={rowIndex % 2 === 0 ? rowBgColor : 'transparent'}>
+    <>
+      <Input
+        placeholder='Busqueda Interactiva...'
+        value={filterText}
+        onChange={(e) => setFilterText(e.target.value)}
+        mb={4}
+        maxW='300px'
+      />
+      <TableContainer boxShadow='md' borderRadius='md'>
+        <Table variant='simple' size='sm'>
+          <TableCaption>{title}</TableCaption>
+          <Thead backgroundColor={headerColor}>
+            <Tr backgroundColor={headerBgColor}>
               {headers.map((header) => (
-                <Td key={header} isNumeric={typeof row[header] === 'number'}>
-                  {row[header]}
-                </Td>
+                <Th key={header} isNumeric={typeof data[0][header] === 'number'}>
+                  {header}
+                </Th>
               ))}
-              {(edit || remove) && (
-                <Td>
-                  {edit && (
-                    <Button
-                      colorScheme='blue'
-                      size='sm'
-                      onClick={() => edit(row)}
-                      mr={2}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                  {remove && (
-                    <Button
-                      colorScheme='red'
-                      size='sm'
-                      onClick={() => remove(row)}
-                    >
-                      Remove
-                    </Button>
-                  )}
-                </Td>
-              )}
+              {(edit || remove) && <Th>Actions</Th>}
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
+          </Thead>
+          <Tbody>
+            {filteredData.map((row, rowIndex) => (
+              <Tr key={row[primaryKey] || rowIndex} _hover={{ backgroundColor: rowHoverColor }} backgroundColor={rowIndex % 2 === 0 ? rowBgColor : 'transparent'}>
+                {headers.map((header) => (
+                  <Td key={header} isNumeric={typeof row[header] === 'number'} padding={4}>
+                    {row[header]}
+                  </Td>
+                ))}
+                {(edit || remove) && (
+                  <Td>
+                    {edit && (
+                      <Button
+                        colorScheme='blue'
+                        size='sm'
+                        onClick={() => edit(row)} // Pasa el objeto completo
+                        mr={2}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {remove && (
+                      <Button
+                        colorScheme='red'
+                        size='sm'
+                        onClick={() => remove(row)} // Pasa el objeto completo
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </Td>
+                )}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }
 
@@ -79,7 +97,8 @@ TableInfo.propTypes = {
   edit: PropTypes.func,
   remove: PropTypes.func,
   primaryKey: PropTypes.string.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  ignoreFields: PropTypes.array
 }
 
 export default TableInfo
