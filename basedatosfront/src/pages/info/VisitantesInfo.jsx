@@ -8,7 +8,12 @@ const VisitantesInfo = () => {
     <>
       <Skeleton isLoaded={!loadingVisitantes} fadeDuration={0.4}>
         {!loadingVisitantes
-          ? <TableInfo data={visitantes} primaryKey='idVisitanteNumber' />
+          ? <TableInfo
+              data={visitantes}
+              primaryKey='idVisitanteNumber'
+              ignoreFields={['idVisitanteNumber']}
+              title='Registro de Visitantes'
+            />
           : <></>}
       </Skeleton>
 
