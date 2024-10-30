@@ -12,6 +12,8 @@ import { useToast } from '@chakra-ui/react'
 import NuevaVisita from './pages/forms/NuevaVisita'
 import VisitantesInfo from './pages/info/VisitantesInfo'
 import TramitesInfo from './pages/info/TramitesInfo'
+import EdificiosInfo from './pages/info/EdificiosInfo'
+
 
 function App () {
   const toast = useToast()
@@ -62,6 +64,7 @@ function App () {
           {formRender.nuevaVisita ? <NuevaVisita /> : <></>}
           {formRender.verVisitantes ? <VisitantesInfo /> : <></>}
           {formRender.verTramites ? <TramitesInfo /> : <></>}
+          {formRender.verEdificios ? <EdificiosInfo /> : <></>}
           {/* eslint-disable-next-line @stylistic/jsx-closing-tag-location */}
         </Sidebar>
         : <></>}
