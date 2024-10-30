@@ -1,9 +1,10 @@
+import RenderContext from '@/context/RenderContext'
 import StepContext from '@/context/StepContext'
 import useGetFetch from '@/hooks/useGetFetch'
 import fetchInsert from '@/utils/fetch/fetchInsert'
 import fetchQuery from '@/utils/fetch/fetchQuery'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
-import { Button, FormLabel, Input, Stack, FormControl, Select, Text, Heading, useToast } from '@chakra-ui/react'
+import { Button, FormControl, FormLabel, Heading, Input, Select, Stack, Text, useToast } from '@chakra-ui/react'
 import FormBase from '@components/forms/FormBase.jsx'
 import StepperForm from '@components/stepper/StepperForm'
 import { useContext, useEffect, useState } from 'react'
@@ -12,6 +13,7 @@ const NuevaVisita = () => {
   const toast = useToast()
   const { activeStep, updateStepIndex, steps } = useContext(StepContext)
   const { data: tramites, loading: loadingTramites } = useGetFetch('http://localhost:8000/tramites')
+  const { updateRenderContext } = useContext(RenderContext)
   const [dpi, setDpi] = useState()
   const [visitante, setVisitante] = useState()
   const [tramite, setTramite] = useState()
@@ -50,8 +52,20 @@ const NuevaVisita = () => {
 
   const fetchDPI = async (data) => {
     const dataResult = await fetchQuery('http://localhost:8000/visitante-by-dpi', data)
-    setVisitante(dataResult[0])
-    updateStepIndex(1)
+    if (dataResult[0]) {
+      setVisitante(dataResult[0])
+      updateStepIndex(1)
+    }
+    if (!dataResult[0]) {
+      toast({
+        title: 'El DPI no Existe en la BD',
+        description: 'Ingrese sus datos',
+        status: 'success',
+        isClosable: true
+      })
+
+      updateRenderContext('visitanteForm')
+    }
   }
 
   const handleTramite = (e) => {
@@ -115,7 +129,6 @@ const NuevaVisita = () => {
 
   return (
     <>
-
       <StepperForm steps={steps} />
       {activeStep === 0
 
