@@ -35,6 +35,13 @@ const SidebarContent = (props) => {
     updateRenderContext('nuevaVisita')
   }
 
+  const handleVerVisitantes = () => {
+    updateRenderContext('verVisitantes')
+  }
+
+  const handleVerTramites = () => {
+    updateRenderContext('verTramites')
+  }
   return (
     <Box
       as='nav'
@@ -89,6 +96,10 @@ const SidebarContent = (props) => {
           <NavItem pl='12' py='2' onClick={handleNuevoTramite}>
             Agregar Nuevo Tramite
           </NavItem>
+
+          <NavItem pl='12' py='2' onClick={handleVerTramites}>
+            Ver Tramites
+          </NavItem>
           <NavItem pl='12' py='2' onClick={handleNuevoFuncionario}>
             Agregar Funcionario
           </NavItem>
@@ -105,6 +116,10 @@ const SidebarContent = (props) => {
         <Collapse in={handleVisitas.isOpen}>
           <NavItem pl='12' py='2' onClick={handleNuevoVisitante}>
             Agregar Visitante
+          </NavItem>
+
+          <NavItem pl='12' py='2' onClick={handleVerVisitantes}>
+            Ver Visitantes
           </NavItem>
           <NavItem pl='12' py='2' onClick={handleNuevaVisita}>
             Agregar Visita
