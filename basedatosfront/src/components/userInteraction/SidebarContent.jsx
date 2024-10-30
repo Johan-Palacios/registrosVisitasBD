@@ -42,6 +42,11 @@ const SidebarContent = (props) => {
   const handleVerTramites = () => {
     updateRenderContext('verTramites')
   }
+
+  const handleVerEdificios = () => {
+    updateRenderContext('verEdificios')
+  }
+
   return (
     <Box
       as='nav'
@@ -140,6 +145,10 @@ const SidebarContent = (props) => {
           </NavItem>
           <NavItem pl='12' py='2' onClick={handleNuevoEdificio}>
             Agregar Edificio
+          </NavItem>
+
+          <NavItem pl='12' py='2' onClick={handleVerEdificios}>
+            Ver Edificios
           </NavItem>
         </Collapse>
       </Flex>
