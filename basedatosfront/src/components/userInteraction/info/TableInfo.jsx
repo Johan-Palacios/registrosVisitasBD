@@ -1,6 +1,9 @@
+import { Search2Icon } from '@chakra-ui/icons'
 import {
   Button,
   Input,
+  InputGroup,
+  InputLeftElement,
   Table,
   TableCaption,
   TableContainer,
@@ -31,13 +34,20 @@ const TableInfo = ({ data, edit, remove, primaryKey, title, ignoreFields = [] })
 
   return (
     <>
-      <Input
-        placeholder='Busqueda Interactiva...'
-        value={filterText}
-        onChange={(e) => setFilterText(e.target.value)}
-        mb={4}
-        maxW='300px'
-      />
+      <InputGroup>
+        <InputLeftElement pointerEvents='none' color='gray.300' fontSize='1.2em'>
+          <Search2Icon />
+
+        </InputLeftElement>
+
+        <Input
+          placeholder='Busqueda Interactiva...'
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+          mb={4}
+          maxW='300px'
+        />
+      </InputGroup>
       <TableContainer boxShadow='md' borderRadius='md'>
         <Table variant='simple' size='sm'>
           <TableCaption>{title}</TableCaption>
